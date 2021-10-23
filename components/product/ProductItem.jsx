@@ -11,7 +11,7 @@ const ProductItem = ({ product }) => {
         <button
           className="btn btn-success"
           style={{ marginLeft: "5px", flex: 1 }}>
-          Buy Now Now
+          Buy
         </button>
       </>
     );

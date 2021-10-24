@@ -15,12 +15,16 @@ const Cart = () => {
     );
 
   return (
-    <div>
+    <div className="row mx-auto">
       <Head>
         <title>Cart Page</title>
       </Head>
 
-      <h1>Cart</h1>
+      <div className="col-md-8 text-secondary table-responsive">
+        <h2 className="text-uppercase">Shopping Cart</h2>
+      </div>
+
+      <div className="col-md-4"></div>
     </div>
   );
 };

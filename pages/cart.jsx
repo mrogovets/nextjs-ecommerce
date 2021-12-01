@@ -1,16 +1,32 @@
 import Head from "next/head";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
+import CartItem from "../components/CartItem";
 import { DataContext } from "../store/GlobalState";
+import Link from "next/link";
 const Cart = () => {
   const { state, dispatch } = useContext(DataContext);
-  const { cart } = state;
+  const { cart, auth } = state;
+
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    const getTotal = () => {
+      const res = cart.reduce((prev, item) => {
+        return prev + item.price * item.quantity;
+      }, 0);
+
+      setTotal(res);
+    };
+
+    getTotal();
+  }, [cart]);
 
   if (cart.length === 0)
     return (
       <img
         className="img-responsive w-100"
         src="/empty_cart.jpg"
-        alt="Empty cart"
+        alt="not cart"
       />
     );
 
@@ -20,11 +36,50 @@ const Cart = () => {
         <title>Cart Page</title>
       </Head>
 
-      <div className="col-md-8 text-secondary table-responsive">
+      <div className="col-md-8 text-secondary table-responsive my-3">
         <h2 className="text-uppercase">Shopping Cart</h2>
+        <table className="table my-3">
+          <tbody>
+            {cart.map((item) => (
+              <CartItem
+                key={item._id}
+                item={item}
+                dispatch={dispatch}
+                cart={cart}
+              />
+            ))}
+          </tbody>
+        </table>
       </div>
+      <div className="col-md-4 my-3 text-right text-uppercase text-secondary">
+        <form>
+          <h2>Shipping</h2>
 
-      <div className="col-md-4"></div>
+          <label htmlFor="address">Address</label>
+          <input
+            type="text"
+            name="address"
+            id="address"
+            className="form-control mb-2"
+          />
+
+          <label htmlFor="mobile">Mobile</label>
+          <input
+            type="text"
+            name="mobile"
+            id="mobile"
+            className="form-control mb-2"
+          />
+        </form>
+
+        <h3>
+          Total: <span className="text-info">${total}</span>
+        </h3>
+
+        <Link href={auth.user ? "#" : "/singin"}>
+          <a className="btn btn-dark my-2">Proceed with payment</a>
+        </Link>
+      </div>
     </div>
   );
 };

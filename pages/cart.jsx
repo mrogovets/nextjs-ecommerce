@@ -3,6 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import CartItem from "../components/CartItem";
 import { DataContext } from "../store/GlobalState";
 import Link from "next/link";
+import { getData } from "../utils/fetchData";
 const Cart = () => {
   const { state, dispatch } = useContext(DataContext);
   const { cart, auth } = state;
@@ -20,6 +21,32 @@ const Cart = () => {
 
     getTotal();
   }, [cart]);
+
+  useEffect(() => {
+    const cartLocal = JSON.parse(localStorage.getItem("__next__cart01__devat"));
+    if (cartLocal && cartLocal.length > 0) {
+      let newArr = [];
+      const updateCart = async () => {
+        for (const item of cartLocal) {
+          const res = await getData(`product/${item._id}`);
+          const { _id, title, images, price, inStock, sold } = res.product;
+          if (inStock > 0) {
+            newArr.push({
+              _id,
+              title,
+              images,
+              price,
+              inStock,
+              sold,
+              quantity: item.quantity > inStock - sold ? 1 : item.quantity,
+            });
+          }
+        }
+        dispatch({ type: "ADD_CART", payload: newArr });
+      };
+      updateCart();
+    }
+  }, []);
 
   if (cart.length === 0)
     return (
@@ -73,7 +100,7 @@ const Cart = () => {
         </form>
 
         <h3>
-          Total: <span className="text-info">${total}</span>
+          Total: <span className="text-danger">${total}</span>
         </h3>
 
         <Link href={auth.user ? "#" : "/singin"}>

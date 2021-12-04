@@ -17,6 +17,11 @@ const redusers = (state, actions) => {
         ...state,
         cart: actions.payload,
       };
+    case ACTIONS.ADD_MODAL:
+      return {
+        ...state,
+        modal: actions.payload,
+      };
     default:
       return state;
   }

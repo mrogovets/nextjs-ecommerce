@@ -4,11 +4,15 @@ import CartItem from "../components/CartItem";
 import { DataContext } from "../store/GlobalState";
 import Link from "next/link";
 import { getData } from "../utils/fetchData";
+import PaypalBtn from "./paypalBtn";
 const Cart = () => {
   const { state, dispatch } = useContext(DataContext);
   const { cart, auth } = state;
 
   const [total, setTotal] = useState(0);
+  const [address, setAddress] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [payment, setPayment] = useState(false);
 
   useEffect(() => {
     const getTotal = () => {
@@ -46,6 +50,15 @@ const Cart = () => {
       updateCart();
     }
   }, []);
+
+  const handlePayment = () => {
+    if (!address || !mobile)
+      return dispatch({
+        type: "NOTIFY",
+        payload: { error: "Please add your address and mobile." },
+      });
+    setPayment(true);
+  };
 
   if (cart.length === 0)
     return (
@@ -87,6 +100,8 @@ const Cart = () => {
             name="address"
             id="address"
             className="form-control mb-2"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
           />
 
           <label htmlFor="mobile">Mobile</label>
@@ -95,6 +110,8 @@ const Cart = () => {
             name="mobile"
             id="mobile"
             className="form-control mb-2"
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
           />
         </form>
 
@@ -102,9 +119,21 @@ const Cart = () => {
           Total: <span className="text-danger">${total}</span>
         </h3>
 
-        <Link href={auth.user ? "#" : "/singin"}>
-          <a className="btn btn-dark my-2">Proceed with payment</a>
-        </Link>
+        {payment ? (
+          <PaypalBtn
+            total={total}
+            address={address}
+            mobile={mobile}
+            state={state}
+            dispatch={dispatch}
+          />
+        ) : (
+          <Link href={auth.user ? "#!" : "/singin"}>
+            <a className="btn btn-dark my-2" onClick={handlePayment}>
+              Proceed with payment
+            </a>
+          </Link>
+        )}
       </div>
     </div>
   );

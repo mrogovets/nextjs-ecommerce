@@ -86,7 +86,10 @@ const Profile = () => {
             {auth.user.role === "user" ? "User Profile" : "Admin Profile"}
           </h3>
           <div className="avatar">
-            <img src={auth.user.avatar} alt={auth.user.avatar} />
+            <img
+              src={avatar ? URL.createObjectURL(avatar) : auth.user.avatar}
+              alt="avatar"
+            />
             <span>
               <i className="fas fa-camera"></i>
               <p>Change</p>

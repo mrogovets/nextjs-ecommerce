@@ -47,6 +47,31 @@ const Profile = () => {
     });
   };
 
+  const changeAvatar = (e) => {
+    const file = e.target.files[0];
+    if (!file)
+      return dispatch({
+        type: "NOTIFY",
+        payload: { error: "File does not exist." },
+      });
+
+    if (file.size > 1024 * 1024)
+      // 1mb
+      return dispatch({
+        type: "NOTIFY",
+        payload: { error: "The lagest image size is 1mb." },
+      });
+
+    if (file.type !== "image/jpeg" && file.type !== "image/png")
+      // 1mb
+      return dispatch({
+        type: "NOTIFY",
+        payload: { error: "Image format is incorrect." },
+      });
+
+    setData({ ...data, avatar: file });
+  };
+
   if (!auth.user) return null;
 
   return (
@@ -65,7 +90,13 @@ const Profile = () => {
             <span>
               <i className="fas fa-camera"></i>
               <p>Change</p>
-              <input type="file" name="file" id="file_up" />
+              <input
+                type="file"
+                name="file"
+                id="file_up"
+                accept="image/*"
+                onChange={changeAvatar}
+              />
             </span>
           </div>
 

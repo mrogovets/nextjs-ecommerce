@@ -5,6 +5,8 @@ import { DataContext } from "../store/GlobalState";
 import valid from "../utils/valid";
 import { patchData } from "../utils/fetchData";
 
+import { imageUpload } from "../utils/imageUpload";
+
 const Profile = () => {
   const initialState = {
     avatar: "",
@@ -36,6 +38,8 @@ const Profile = () => {
         return dispatch({ type: "NOTIFY", payload: { error: errMsg } });
       updatePassword();
     }
+
+    if (name !== auth.user.name || avatar) updateInfor();
   };
 
   const updatePassword = () => {
@@ -70,6 +74,15 @@ const Profile = () => {
       });
 
     setData({ ...data, avatar: file });
+  };
+
+  const updateInfor = async () => {
+    let media;
+    // dispatch({ type: "NOTIFY", payload: { loading: true } });
+
+    if (avatar) media = await imageUpload([avatar]);
+
+    console.log(media);
   };
 
   if (!auth.user) return null;

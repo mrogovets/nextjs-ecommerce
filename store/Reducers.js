@@ -22,6 +22,11 @@ const redusers = (state, actions) => {
         ...state,
         modal: actions.payload,
       };
+    case ACTIONS.ADD_ORDERS:
+      return {
+        ...state,
+        orders: actions.payload,
+      };
     default:
       return state;
   }

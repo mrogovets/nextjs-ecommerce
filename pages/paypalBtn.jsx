@@ -3,7 +3,7 @@ import { postData } from "../utils/fetchData";
 
 const PaypalBtn = ({ total, address, mobile, state, dispatch }) => {
   const refPaypalBtn = useRef();
-  const { cart, auth } = state;
+  const { cart, auth, orders } = state;
 
   useEffect(() => {
     paypal
@@ -35,6 +35,10 @@ const PaypalBtn = ({ total, address, mobile, state, dispatch }) => {
                   payload: { error: res.err },
                 });
               dispatch({ type: "ADD_CART", payload: [] });
+              dispatch({
+                type: "ADD_ORDERS",
+                payload: [...orders, res.newOrder],
+              });
               return dispatch({
                 type: "NOTIFY",
                 payload: { success: res.msg },
@@ -42,8 +46,8 @@ const PaypalBtn = ({ total, address, mobile, state, dispatch }) => {
             });
 
             // This function shows a transaction success message to your buyer.
-            console.log(data);
-            alert("Transaction completed by " + details.payer.name.given_name);
+            /* console.log(data);
+            alert("Transaction completed by " + details.payer.name.given_name); */
           });
         },
       })

@@ -22,7 +22,8 @@ const DetailOrder = () => {
       </Head>
       <div>
         <button className="btn btn-dark" onClick={() => router.back()}>
-          <i className="fas fa-long-arrow-alt-left" aria-hidden></i> Go Back
+          <i className="fas fa-long-arrow-alt-left" aria-hidden="true"></i> Go
+          Back
         </button>
       </div>
       <div style={{ maxWidth: "600px", margin: "20px auto" }}>
@@ -44,6 +45,34 @@ const DetailOrder = () => {
                 {order.delivered
                   ? `Delivered on ${order.updateAt}`
                   : "Not Delivered"}
+              </div>
+              <div>
+                <h4>Order Items</h4>
+                {order.cart.map((item) => (
+                  <div
+                    className="row border-bottom mx-0 p-2 justify-content-between align-item-center"
+                    key={item._id}
+                    style={{ maxWidth: "550px" }}>
+                    <img
+                      src={item.images[0].url}
+                      alt={item.images[0].url}
+                      style={{
+                        width: "50px",
+                        height: "45px",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <h5 className="flex-fill text-secondary px-3 m-0">
+                      <Link href={`/product/${item._id}`}>
+                        <a>{item.title}</a>
+                      </Link>
+                    </h5>
+                    <span className="text-info m-0">
+                      {item.quantity} x ${item.price} = $
+                      {item.price * item.quantity}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

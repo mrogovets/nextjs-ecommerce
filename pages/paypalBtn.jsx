@@ -35,9 +35,13 @@ const PaypalBtn = ({ total, address, mobile, state, dispatch }) => {
                   payload: { error: res.err },
                 });
               dispatch({ type: "ADD_CART", payload: [] });
+              const newOrder = {
+                ...res.newOrder,
+                user: auth.user,
+              };
               dispatch({
                 type: "ADD_ORDERS",
-                payload: [...orders, res.newOrder],
+                payload: [...orders, newOrder],
               });
               return dispatch({
                 type: "NOTIFY",

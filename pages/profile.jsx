@@ -191,9 +191,9 @@ const Profile = () => {
           </button>
         </div>
 
-        <div className="col-md-8 table-responsive">
+        <div className="col-md-8">
           <h3 className="text-uppercase">Orders</h3>
-          <div className="my-3">
+          <div className="my-3 table-responsive">
             <table
               className="table-bordered table-hover w-100 text-uppercase"
               style={{ minWidth: "600px", cursor: "pointer" }}>
